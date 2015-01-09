@@ -1,0 +1,175 @@
+
+        case 0x09: //ADD  IX,BC
+            break;
+        case 0x19: //ADD  IX,DE
+            break;
+        case 0x21: //LD   IX,&0000
+            break;
+        case 0x22: //LD  (&0000),IX
+            break;
+        case 0x23: //INC  IX
+            break;
+        case 0x24: //INC  IXH
+            break;
+        case 0x25: //DEC  IXH
+            break;
+        case 0x26: //LD   IXH,&00
+            break;
+        case 0x29: //ADD  IX,IX
+            break;
+        case 0x2A: //LD  IX,(&0000)
+            break;
+        case 0x2B: //DEC  IX
+            break;
+        case 0x2C: //INC  IXL
+            break;
+        case 0x2D: //DEC  IXL
+            break;
+        case 0x2E: //LD   IXL,&00
+            break;
+        case 0x34: //INC  (IX+0)
+            break;
+        case 0x35: //DEC  (IX+0)
+            break;
+        case 0x36: //LD  (IX+0),&00
+            break;
+        case 0x39: //ADD  IX,SP
+            break;
+        case 0x44: //LD   B,IXH
+            break;
+        case 0x45: //LD   B,IXL
+            break;
+        case 0x46: //LD   B,(IX+0)
+            break;
+        case 0x4C: //LD   C,IXH
+            break;
+        case 0x4D: //LD   C,IXL
+            break;
+        case 0x4E: //LD   C,(IX+0)
+            break;
+        case 0x54: //LD   D,IXH
+            break;
+        case 0x55: //LD   D,IXL
+            break;
+        case 0x56: //LD   D,(IX+0)
+            break;
+        case 0x5C: //LD   E,IXH
+            break;
+        case 0x5D: //LD   E,IXL
+            break;
+        case 0x5E: //LD   E,(IX+0)
+            break;
+        case 0x60: //LD   IXH,B
+            break;
+        case 0x61: //LD   IXH,C
+            break;
+        case 0x62: //LD   IXH,D
+            break;
+        case 0x63: //LD   IXH,E
+            break;
+        case 0x64: //LD   IXH,IXH
+            break;
+        case 0x65: //LD   IXH,IXL
+            break;
+        case 0x66: //LD   H,(IX+0)
+            break;
+        case 0x67: //LD   IXH,A
+            break;
+        case 0x68: //LD   IXL,B
+            break;
+        case 0x69: //LD   IXL,C
+            break;
+        case 0x6A: //LD   IXL,D
+            break;
+        case 0x6B: //LD   IXL,E
+            break;
+        case 0x6C: //LD   IXL,IXH
+            break;
+        case 0x6D: //LD   IXL,IXL
+            break;
+        case 0x6E: //LD   L,(IX+0)
+            break;
+        case 0x6F: //LD   IXL,A
+            break;
+        case 0x70: //LD   (IX+0),B
+            break;
+        case 0x71: //LD   (IX+0),C
+            break;
+        case 0x72: //LD   (IX+0),D
+            break;
+        case 0x73: //LD   (IX+0),E
+            break;
+        case 0x74: //LD   (IX+0),H
+            break;
+        case 0x75: //LD   (IX+0),L
+            break;
+        case 0x77: //LD   (IX+0),A
+            break;
+        case 0x7C: //LD   A,IXH
+            break;
+        case 0x7D: //LD   A,IXL
+            break;
+        case 0x7E: //LD   A,(IX+0)
+            break;
+        case 0x84: //ADD  A,IXH
+            break;
+        case 0x85: //ADD  A,IXL
+            break;
+        case 0x86: //ADD  A,(IX+0)
+            break;
+        case 0x8C: //ADC  A,IXH
+            break;
+        case 0x8D: //ADC  A,IXL
+            break;
+        case 0x8E: //ADC  A,(IX+0)
+            break;
+        case 0x94: //SUB  A,IXH
+            break;
+        case 0x95: //SUB  A,IXL
+            break;
+        case 0x96: //SUB  A,(IX+0)
+            break;
+        case 0x9C: //SBC  A,IXH
+            break;
+        case 0x9D: //SBC  A,IXL
+            break;
+        case 0x9E: //SBC  A,(IX+0)
+            break;
+        case 0xA4: //AND  IXH
+            break;
+        case 0xA5: //AND  IXL
+            break;
+        case 0xA6: //AND  (IX+0)
+            break;
+        case 0xAC: //XOR  IXH
+            break;
+        case 0xAD: //XOR  IXL
+            break;
+        case 0xAE: //XOR  (IX+0)
+            break;
+        case 0xB4: //OR   IXH
+            break;
+        case 0xB5: //OR   IXL
+            break;
+        case 0xB6: //OR   (IX+0)
+            break;
+        case 0xBC: //CP   IXH
+            break;
+        case 0xBD: //CP   IXL
+            break;
+        case 0xBE: //CP   (IX+0)
+            break;
+        case 0xCB: //-
+            break;
+        case 0xE1: //POP  IX
+            break;
+        case 0xE3: //EX   (SP),IX
+            break;
+        case 0xE5: //PUSH IX
+            break;
+        case 0xE9: //JP   (IX)
+            break;
+        case 0xF9: //-
+            break;
+        default:
+            std::cerr << "unknown DD opcode " << (int)m_opcode <<"\n";
