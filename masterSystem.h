@@ -1,6 +1,6 @@
 #ifndef __MASTERSYSTEM_H__
 #define __MASTERSYSTEM_H__
-#include <cstdint>
+#include <stdint.h>
 
 #define START_ADDRESS 0
 #define START_STACK 0
@@ -80,7 +80,7 @@ class MasterSystem
     uint16_t long16[11];
     uint8_t  short8[22];
     }        m_registers;
-    char     m_opcode;
+    uint16_t m_opcode;
     uint16_t m_sp;
     uint16_t m_pc;
     bool     m_iff[2];
