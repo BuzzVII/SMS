@@ -4,8 +4,12 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include <unistd.h>
+#include "raylib.h"
 
 #define RAM_SIZE (128+64)*1024
+#define SCREEN_WIDTH 800
+#define SCREEN_HEIGHT 450
 #define STACK_DISPLAY_COUNT 5
 #define START_ADDRESS 0
 #define START_STACK 0
@@ -82,27 +86,26 @@ int powerOn(MasterSystem* console) {
 }
 
 void printState(MasterSystem* console) {
-    printf("\e[1;1H\e[2J");
+    printf("\033[1;1H");//\033[2J");
     printf("Current console state:\n");
     printf("   power: %d\n", console->power);
     printf("   debug: %d\n", console->debug);
     printf("   RAM:\n");
-    printf("\e[36m");
+    printf("\033[36m");
     for (size_t i = 0; i < RAM_SIZE; ++i) {
         if ( i == console->m_sp ) {
-            printf("\e[31m");
-        }
-        if ( i == console->m_pc ) {
-            printf("\e[42m");
+            printf("\033[31m");
+        } if ( i == console->m_pc ) {
+            printf("\033[42m");
         }
         printf("%x", console->m_ram[i]);
-        printf("\e[0m\e[36m ");
+        printf("\033[0m\033[36m ");
         if ( i == 100) {
             printf("...\n");
             break;
         }
     }
-    printf("\n\e[33mA  F  C  D  E  H  L  \e[31mSP \e[0m\e[42mPC\e[0m\n");
+    printf("\n\033[33mA  F  C  D  E  H  L  \033[31mSP \033[0m\033[42mPC\033[0m\n");
     printf("%02x ", (int)console->A   );
     printf("%02x ", (int)console->F   );
     printf("%02x ", (int)console->C   );
@@ -112,14 +115,14 @@ void printState(MasterSystem* console) {
     printf("%02x ", (int)console->L   );
     printf("%02x ", (int)console->m_sp);
     printf("%02x ", (int)console->m_pc);
-    printf("\n\e[33mA'  F'  C'  D'  E'  H'  L'\e[0m\n");
+    printf("\n\033[33mA'  F'  C'  D'  E'  H'  L'\033[0m\n");
     printf("%02x ",  (int)console->Ax);
     printf("%02x ",  (int)console->Fx);
     printf("%02x ",  (int)console->Cx);
     printf("%02x ",  (int)console->Dx);
     printf("%02x ",  (int)console->Hx);
     printf("%02x\n", (int)console->Lx);
-    printf("\e[36mSTACK:\e[0m\n");
+    printf("\033[36mSTACK:\033[0m\n");
     for (size_t i = 0; i < STACK_DISPLAY_COUNT; ++i)
         printf("%02x ", (int)console->m_ram[console->m_sp+i]);
 }
@@ -149,6 +152,21 @@ int main(int argc, char** argv) {
     char rom[8] = "test.rom";
     load(&console, rom);
     powerOn(&console);
-    printState(&console);
+    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Console");
+    SetTargetFPS(30);
+
+    bool running = true;
+    printf("\033[1;1H\033[2J");
+    while (!WindowShouldClose() && running) {
+        // printState(&console);
+        if (IsKeyPressed(KEY_Q)) {
+            running = false;
+            printf("EXIT!!!");
+        }
+        BeginDrawing();
+            ClearBackground(RAYWHITE);
+        EndDrawing();
+    }
+    CloseWindow();
     return 0;
 }
