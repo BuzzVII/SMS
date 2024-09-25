@@ -6,12 +6,49 @@
 #include <stdbool.h>
 
 #define RAM_SIZE (128+64)*1024
-#define START_ADDRESS 0 
+#define STACK_DISPLAY_COUNT 5
+#define START_ADDRESS 0
 #define START_STACK 0
+#define A   m_registers.short8[0]
+#define F   m_registers.short8[1]
+#define B   m_registers.short8[2]
+#define C   m_registers.short8[3]
+#define D   m_registers.short8[4]
+#define E   m_registers.short8[5]
+#define H   m_registers.short8[6]
+#define L   m_registers.short8[7]
+#define AF  m_registers.long16[0]
+#define BC  m_registers.long16[1]
+#define DE  m_registers.long16[2]
+#define HL  m_registers.long16[3]
+#define Ax  m_registers.short8[8]
+#define Fx  m_registers.short8[9]
+#define Bx  m_registers.short8[10]
+#define Cx  m_registers.short8[11]
+#define Dx  m_registers.short8[12]
+#define Ex  m_registers.short8[13]
+#define Hx  m_registers.short8[14]
+#define Lx  m_registers.short8[15]
+#define AFx m_registers.long16[4]
+#define BCx m_registers.long16[5]
+#define DEx m_registers.long16[6]
+#define HLx m_registers.long16[7]
+#define IX  m_registers.long16[8]
+#define IY  m_registers.long16[9]
 
-typedef struct MasterSystem{
+#define F_S 128
+#define F_Z 64
+#define F_H 16
+#define F_P 4
+#define F_N 2
+#define F_C 1
+
+#define GET_16(x) ((uint16_t) m_ram[x]) | ((uint16_t) m_ram[x+1] << 8)
+
+
+typedef struct {
     bool power;
-    bool debug; 
+    bool debug;
     char  m_ram[RAM_SIZE];
     char  m_vram[RAM_SIZE];
 
@@ -37,32 +74,57 @@ typedef struct MasterSystem{
     bool     m_iff[2];
 } MasterSystem;
 
-int powerOn(MasterSystem* console)
-{
+int powerOn(MasterSystem* console) {
     console->m_pc  = START_ADDRESS;
     console->m_sp  = START_STACK;
     console->power = true;
     return 0;
 }
 
-void printState(MasterSystem* console)
-{
+void printState(MasterSystem* console) {
+    printf("\e[1;1H\e[2J");
     printf("Current console state:\n");
     printf("   power: %d\n", console->power);
     printf("   debug: %d\n", console->debug);
-    printf("   PC: %d, SP: %d\n", console->m_pc, console->m_sp);
     printf("   RAM:\n");
+    printf("\e[36m");
     for (size_t i = 0; i < RAM_SIZE; ++i) {
-        printf("%x ", console->m_ram[i]);
+        if ( i == console->m_sp ) {
+            printf("\e[31m");
+        }
+        if ( i == console->m_pc ) {
+            printf("\e[42m");
+        }
+        printf("%x", console->m_ram[i]);
+        printf("\e[0m\e[36m ");
         if ( i == 100) {
             printf("...\n");
             break;
         }
     }
+    printf("\n\e[33mA  F  C  D  E  H  L  \e[31mSP \e[0m\e[42mPC\e[0m\n");
+    printf("%02x ", (int)console->A   );
+    printf("%02x ", (int)console->F   );
+    printf("%02x ", (int)console->C   );
+    printf("%02x ", (int)console->D   );
+    printf("%02x ", (int)console->E   );
+    printf("%02x ", (int)console->H   );
+    printf("%02x ", (int)console->L   );
+    printf("%02x ", (int)console->m_sp);
+    printf("%02x ", (int)console->m_pc);
+    printf("\n\e[33mA'  F'  C'  D'  E'  H'  L'\e[0m\n");
+    printf("%02x ",  (int)console->Ax);
+    printf("%02x ",  (int)console->Fx);
+    printf("%02x ",  (int)console->Cx);
+    printf("%02x ",  (int)console->Dx);
+    printf("%02x ",  (int)console->Hx);
+    printf("%02x\n", (int)console->Lx);
+    printf("\e[36mSTACK:\e[0m\n");
+    for (size_t i = 0; i < STACK_DISPLAY_COUNT; ++i)
+        printf("%02x ", (int)console->m_ram[console->m_sp+i]);
 }
 
-void load(MasterSystem* console, const char* cartridge)
-{
+void load(MasterSystem* console, const char* cartridge) {
         printf("Loading file %s\n");
         FILE *fptr;
 
@@ -82,8 +144,7 @@ void load(MasterSystem* console, const char* cartridge)
 }
 
 
-int main(int argc, char** argv)
-{
+int main(int argc, char** argv) {
     MasterSystem console;
     char rom[8] = "test.rom";
     load(&console, rom);
