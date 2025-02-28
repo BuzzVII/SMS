@@ -41,28 +41,15 @@
 
 #define GET_16(x) ((uint16_t) m_ram[x]) | ((uint16_t) m_ram[x+1] << 8)
 
-class MasterSystem
-{
-    public:
-    static MasterSystem& getInstance()
-    {
-        static MasterSystem Instance;
-        return Instance;
-    }
-    void        load(const char* cartridge);
-    int         powerOn();
-    void        z80();
-    void        video();
-    void        sound();
-    inline void ret(bool condition);
-    inline void jump(bool condition);
-    inline void call(bool condition);
-    void        powerOff(){}
 
-    private:
-    MasterSystem(){}
-    char  m_ram[(128+64)*1024];
-    char  m_vram[(128+64)*1024];
+typdef struct masterSystem {
+    bool power;
+    char*  m_ram; //[(128+64)*1024];
+    char*  m_vram; //[(128+64)*1024];
+    char*  m_cpu;
+    char*  m_schip;
+    char*  m_vchip;
+     
     /* Registers
     0 A   F flag bits (SZ-H-PNC)
     1 B   C
@@ -77,12 +64,23 @@ class MasterSystem
    10 I   R
     */
     union {
-    uint16_t long16[11];
-    uint8_t  short8[22];
+        uint16_t long16[11];
+        uint8_t  short8[22];
     }        m_registers;
     uint16_t m_opcode;
     uint16_t m_sp;
     uint16_t m_pc;
     bool     m_iff[2];
-};
+} MasterSystem;
+
+void        load(MasterSystem* console, const char* cartridge);
+int         powerOn(MasterSystem* console);
+void        z80(MasterSystem* console);
+void        video(MasterSystem* console);
+void        sound(MasterSystem* console);
+inline void ret(MasterSystem* console, bool condition);
+inline void jump(MasterSystem* console, bool condition);
+inline void call(MasterSystem* console, bool condition);
+void        powerOff(MasterSystem* console){}
+
 #endif
